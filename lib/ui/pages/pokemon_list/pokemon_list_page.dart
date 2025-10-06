@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokeapi66/ui/widgets/custom_bottom_bar.dart';
 import '../../helpers/utils/utils.dart';
-import '../../providers/favorites_provider.dart';
 import '../../providers/pokemon_provider.dart';
 import '../../providers/filter_provider.dart';
+import '../../widgets/error_widget.dart';
 import '../../widgets/filter_bottom_sheet.dart';
 import '../../widgets/pokemon_card.dart';
 import '../favorites/favorites_page.dart';
-import '../detail/pokemon_detail_page.dart';
+import '../profile/profile_page.dart';
+import '../regions/regions_page.dart';
 
 class PokemonListPage extends ConsumerStatefulWidget {
   const PokemonListPage({super.key});
@@ -30,8 +31,9 @@ class _PokemonListPageState extends ConsumerState<PokemonListPage> {
   Widget build(BuildContext context) {
     final screens = [
       _buildPokemonList(),
+      const RegionsPage(),
       const FavoritesPage(),
-      _buildProfileView(),
+      const ProfilePage(),
     ];
 
     return Scaffold(
@@ -74,12 +76,12 @@ class _PokemonListPageState extends ConsumerState<PokemonListPage> {
 
         return Column(
           children: [
-            // Barra de búsqueda y filtro
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  // 🔹 Campo de búsqueda
+
                   Expanded(
                     child: TextField(
                       onChanged: (value) {
@@ -130,7 +132,7 @@ class _PokemonListPageState extends ConsumerState<PokemonListPage> {
 
             ),
 
-            // Texto de resultados
+
             if (displayPokemons.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -160,13 +162,18 @@ class _PokemonListPageState extends ConsumerState<PokemonListPage> {
                 ),
               ),
 
-            const SizedBox(height: 8),
+            if (displayPokemons.isEmpty)
+              const Center(
+                child: ErrorStateWidget(
+                  canRetry: false,
+                  title: 'No hay pokémon disponibles',
+                  description: 'Intenta cambiar el filtro o busca otra palabra clave',
+                )
+              ),
 
-            // Lista de Pokemon
-            Expanded(
-              child: displayPokemons.isEmpty
-                  ? const Center(child: Text('No hay pokémon disponibles'))
-                  : RefreshIndicator(
+            if (displayPokemons.isNotEmpty)
+              Expanded(
+              child: RefreshIndicator(
                 onRefresh: () => ref.read(pokemonProvider.notifier).loadPokemons(),
                 child: ListView.separated(
                   separatorBuilder: (context, index) => const SizedBox(height: 10),
@@ -179,33 +186,15 @@ class _PokemonListPageState extends ConsumerState<PokemonListPage> {
                 ),
               ),
             ),
-          ],
+          ].separated(const SizedBox(height: 8)),
         );
       },
-      error: (message) => Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            const SizedBox(height: 16),
-            Text('Error: $message'),
-            const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: () => ref.read(pokemonProvider.notifier).loadPokemons(),
-              icon: const Icon(Icons.refresh),
-              label: const Text('Reintentar'),
-            ),
-          ],
-        ),
+      error: (message) => ErrorStateWidget(
+        onRetry: () => ref.read(pokemonProvider.notifier).loadPokemons(),
       ),
+
     );
   }
-
-
 
   void _showFilterBottomSheet(BuildContext context) {
     final currentFilters = ref.read(filterProvider) ?? <String>[];
@@ -223,24 +212,4 @@ class _PokemonListPageState extends ConsumerState<PokemonListPage> {
     );
   }
 
-
-  Widget _buildProfileView() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.person,
-            size: 80,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Perfil de Usuario',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-        ],
-      ),
-    );
-  }
 }

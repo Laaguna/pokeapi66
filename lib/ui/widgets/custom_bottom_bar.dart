@@ -42,8 +42,9 @@ class CustomBottomBar extends StatelessWidget {
           onDestinationSelected: onItemSelected,
           destinations: [
             _buildDestination(Icons.home, 'Pokédex', 0, selectedIndex),
-            _buildDestination(Icons.favorite, 'Favoritos', 1, selectedIndex),
-            _buildDestination(Icons.person, 'Perfil', 2, selectedIndex),
+            _buildDestination(Icons.map, 'Regiones', 1, selectedIndex),
+            _buildDestination(Icons.favorite, 'Favoritos', 2, selectedIndex),
+            _buildDestination(Icons.person, 'Perfil', 3, selectedIndex),
           ],
         ),
       ),

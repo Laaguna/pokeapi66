@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pokeapi66/ui/widgets/error_widget.dart';
 
 import '../../providers/favorites_provider.dart';
 import '../../widgets/pokemon_card.dart';
@@ -13,7 +14,11 @@ class FavoritesPage extends ConsumerWidget {
 
     if (favoritePokemons.isEmpty) {
       return const Center(
-        child: Text('No tienes Pokémon favoritos aún'),
+        child: ErrorStateWidget(
+          canRetry: false,
+          title: 'No has marcado ningún Pokémon como favorito',
+          description: 'Haz clic en el ícono de corazón de tus Pokémon favoritos y aparecerán aquí.',
+        ),
       );
     }
 
