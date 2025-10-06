@@ -102,6 +102,14 @@ extension SeparatedExtension on List<Widget> {
       ...this,
     ];
   }
+
+  List<Widget> addToEnd(Widget widget) {
+    if (isEmpty) return [];
+    return [
+      ...this,
+      widget,
+    ];
+  }
 }
 
 

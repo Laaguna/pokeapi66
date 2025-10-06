@@ -91,7 +91,7 @@ class PokemonCard extends StatelessWidget {
                         ),
                         child: Center( // centra el container pequeño
                           child: Container(
-                            padding: const EdgeInsets.all(20), // 👈 controla el tamaño relativo
+                            padding: const EdgeInsets.all(20),
                             // decoration: BoxDecoration(
                             //   image: DecorationImage(
                             //     image: AssetImage(getTypeImage(pokemon.types.first.type.name)),
