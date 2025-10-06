@@ -4,6 +4,7 @@ import 'package:pokeapi66/ui/widgets/pokemon_info_chip.dart';
 import 'package:pokeapi66/ui/widgets/pokemon_type_chips.dart';
 import '../../../domain/models/pokemon/pokemon.dart';
 import '../../helpers/utils/utils.dart';
+import '../../widgets/favorite_pokemon_button.dart';
 
 class PokemonDetailPage extends StatelessWidget {
   final Pokemon pokemon;
@@ -72,6 +73,12 @@ class PokemonDetailPage extends StatelessWidget {
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () => Navigator.pop(context),
                     ),
+                  ),
+
+                  Positioned(
+                    top: 60,
+                    right: 16,
+                    child: FavoriteButton(pokemonId: pokemon.id),
                   ),
 
                   Positioned(

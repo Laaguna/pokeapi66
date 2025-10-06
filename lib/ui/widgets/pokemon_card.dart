@@ -6,6 +6,7 @@ import '../../domain/models/pokemon/pokemon.dart';
 import '../helpers/utils/utils.dart';
 import '../pages/detail/pokemon_detail_page.dart';
 import '../providers/favorites_provider.dart';
+import 'favorite_pokemon_button.dart';
 
 class PokemonCard extends StatelessWidget {
   final Pokemon pokemon;
@@ -124,15 +125,8 @@ class PokemonCard extends StatelessWidget {
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: IconButton(
-                        onPressed: () {
-                          ref.read(favoritesProvider.notifier).toggle(pokemon.id);
-                        },
-                        icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                        ),
-                        color: isFavorite ? Colors.red : Colors.white,
-                      ),
+                      child: FavoriteButton(pokemonId: pokemon.id),
+
                     ),
                   ],
                 ),
