@@ -133,34 +133,36 @@ class _PokemonListPageState extends ConsumerState<PokemonListPage> {
             ),
 
 
-            if (displayPokemons.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Se han encontrado ${displayPokemons.length} resultados',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (displayPokemons.isNotEmpty)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Se han encontrado ${displayPokemons.length} resultados',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
 
-            if (filterCount > 0)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      ref.read(filterProvider.notifier).state = null;
-                    },
-                    child: const Text('Borrar filtro'),
-                  ),
-                ),
+                    if (filterCount > 0)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            ref.read(filterProvider.notifier).state = null;
+                          },
+                          child: const Text('Borrar filtro'),
+                        ),
+                      ),
+                  ]
               ),
+            ),
 
             if (displayPokemons.isEmpty)
               const Center(

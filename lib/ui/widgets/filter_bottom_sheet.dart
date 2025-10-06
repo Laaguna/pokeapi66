@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../providers/filter_provider.dart';
+import '../../ui/helpers/utils/utils.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final List<String> currentFilters;
@@ -59,66 +60,104 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
-                ),
-                const Text(
-                  'Filtra por tus preferencias',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(width: 48),
-              ],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.close),
             ),
-          ),
-          const Divider(height: 1),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                const Text(
-                  'Tipo',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ...types.map((type) {
-                  final typeKey = typeMapping[type]!;
-                  final isSelected = selectedFilters.contains(typeKey);
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
 
-                  return CheckboxListTile(
-                    title: Text(type),
-                    value: isSelected,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        if (value == true) {
-                          selectedFilters.add(typeKey);
-                        } else {
-                          selectedFilters.remove(typeKey);
-                        }
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity.trailing,
-                  );
-                }).toList(),
-              ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Tipo',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        Icon(
+                          Icons.keyboard_arrow_up_outlined,
+                          color: Colors.grey,
+                          size: 30,
+                        )
+
+                      ],
+                    ),
+                  ),
+
+                  const Padding(
+                    padding: EdgeInsets.all(1),
+                    child: Divider(height: 1),
+                  ),
+
+                  Column(
+                    children: types.map((type) {
+                      final typeKey = typeMapping[type]!;
+                      final isSelected = selectedFilters.contains(typeKey);
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (isSelected) {
+                              selectedFilters.remove(typeKey);
+                            } else {
+                              selectedFilters.add(typeKey);
+                            }
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                type,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                height: 24,
+                                width: 24,
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: CupertinoColors.separator,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: isSelected
+                                    ? const Icon(
+                                  CupertinoIcons.check_mark,
+                                  color: CupertinoColors.white,
+                                  size: 16,
+                                )
+                                    : null,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  )
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+            Column(
               children: [
                 SizedBox(
                   width: double.infinity,
@@ -131,13 +170,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(100),
                       ),
                     ),
-                    child: const Text('Aplicar'),
+                    child: const Text(
+                        'Aplicar',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)
+                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
@@ -145,17 +186,21 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(100),
                       ),
                     ),
-                    child: const Text('Cancelar'),
+                    child: const Text(
+                      'Cancelar',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)
+                    ),
                   ),
                 ),
-              ],
+              ].separated(const SizedBox(height: 8))
+                  .addToStart(const SizedBox(height: 8)),
             ),
-          ),
-        ],
-      ),
+          ].separated(const SizedBox(height: 8)),
+        ),
+      )
     );
   }
 }
