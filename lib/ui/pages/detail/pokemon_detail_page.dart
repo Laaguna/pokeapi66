@@ -43,8 +43,28 @@ class PokemonDetailPage extends StatelessWidget {
                         color: colorType.withOpacity(0.9),
                         shape: BoxShape.circle,
                       ),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          margin: const EdgeInsets.all(10),
+                          height: MediaQuery.of(context).size.width * 0.5,
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(getTypeImage(pokemon.types.first.type.name)),
+                              fit: BoxFit.contain,
+                              colorFilter: ColorFilter.mode(
+                                getTypeHighlightColor(pokemon.types.first.type.name).withOpacity(0.15),
+                                BlendMode.srcATop,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
+
+
                   Positioned(
                     top: 60,
                     left: 16,
