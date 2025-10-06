@@ -84,4 +84,17 @@ String getTypeImage(String type) {
   return images[type.toLowerCase()] ?? 'assets/types/normal.png';
 }
 
+extension SeparatedExtension on List<Widget> {
+  List<Widget> separated(Widget separator) {
+    if (isEmpty) return [];
+    return [
+      for (int i = 0; i < length; i++) ...[
+        this[i],
+        if (i < length - 1) separator,
+      ]
+    ];
+  }
+}
+
+
 
